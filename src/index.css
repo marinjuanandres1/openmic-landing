@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0a0a0a;
+  color: white;
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Topographic SVG background ── */
+.topo-bg {
+  background-color: #0a0a0a;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M100 10 Q130 30 150 60 Q170 90 160 120 Q150 150 120 165 Q90 180 60 165 Q30 150 20 120 Q10 90 30 60 Q50 30 100 10Z' stroke='%237c3aed' stroke-opacity='0.12' fill='none' stroke-width='1'/%3E%3Cpath d='M100 25 Q125 42 142 68 Q158 94 148 118 Q138 142 114 155 Q90 168 66 155 Q42 142 32 118 Q22 94 38 68 Q55 42 100 25Z' stroke='%237c3aed' stroke-opacity='0.1' fill='none' stroke-width='1'/%3E%3Cpath d='M100 40 Q120 54 134 76 Q148 98 140 118 Q132 138 112 148 Q92 158 72 148 Q52 138 44 118 Q36 98 50 76 Q64 54 100 40Z' stroke='%237c3aed' stroke-opacity='0.08' fill='none' stroke-width='1'/%3E%3Cpath d='M100 55 Q116 66 127 84 Q138 102 132 118 Q126 134 110 142 Q94 150 78 142 Q62 134 56 118 Q50 102 61 84 Q72 66 100 55Z' stroke='%237c3aed' stroke-opacity='0.07' fill='none' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ── Glassmorphism card ── */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(124, 58, 237, 0.18);
+}
+
+/* ── Gradient text ── */
+.gradient-text {
+  background: linear-gradient(135deg, #a855f7 0%, #c084fc 50%, #e879f9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── CTA button ── */
+.btn-primary {
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #6d28d9 0%, #9333ea 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(124, 58, 237, 0.45);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Outline button ── */
+.btn-outline {
+  border: 2px solid rgba(124, 58, 237, 0.6);
+  color: #c084fc;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  background: transparent;
+}
+.btn-outline:hover {
+  background: rgba(124, 58, 237, 0.12);
+  border-color: #a855f7;
+  transform: translateY(-2px);
+}
+
+/* ── Form inputs ── */
+.form-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(124, 58, 237, 0.25);
+  color: white;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+.form-input:focus {
+  outline: none;
+  border-color: rgba(168, 85, 247, 0.7);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+  background: rgba(255, 255, 255, 0.07);
+}
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
