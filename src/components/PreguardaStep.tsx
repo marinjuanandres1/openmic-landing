@@ -9,11 +9,6 @@ interface PreguardaStepProps {
 export default function PreguardaStep({ onConfirmed }: PreguardaStepProps) {
   const [clicked, setClicked] = useState(false)
 
-  const handlePreguardaClick = () => {
-    window.open(PREGUARDA_URL, '_blank', 'noopener,noreferrer')
-    setClicked(true)
-  }
-
   return (
     <section className="py-20 px-6 topo-bg">
       <div className="max-w-xl mx-auto">
@@ -38,12 +33,15 @@ export default function PreguardaStep({ onConfirmed }: PreguardaStepProps) {
           </p>
 
           {!clicked ? (
-            <button
-              onClick={handlePreguardaClick}
-              className="btn-primary w-full py-4 rounded-xl text-white font-bold text-lg tracking-widest uppercase"
+            <a
+              href={PREGUARDA_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setClicked(true)}
+              className="btn-primary block w-full py-4 rounded-xl text-white font-bold text-lg tracking-widest uppercase text-center"
             >
               Preguarda ahora →
-            </button>
+            </a>
           ) : (
             <div className="animate-fadeInUp space-y-4">
               <p className="flex items-center justify-center gap-2 text-brand-400 text-sm">
