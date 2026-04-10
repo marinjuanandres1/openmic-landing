@@ -42,10 +42,18 @@ export default function Hero({ onCTAClick }: HeroProps) {
         </p>
 
         {/* Description card */}
-        <div className="glass rounded-2xl px-8 py-6 mb-12 max-w-lg text-left">
+        <div className="glass rounded-2xl px-8 py-6 mb-8 max-w-lg text-left">
           <p className="text-gray-300 text-base md:text-lg leading-relaxed">
             Vamos a celebrar el lanzamiento de "Mi obra de arte", la nueva canción de Andrea Prieto con Sotomonte, con un Open Mic en La Quinta Copa, apoyado por Siente Live.
           </p>
+        </div>
+
+        {/* Free entry badge */}
+        <div className="flex items-center gap-2 bg-brand-600/20 border border-brand-500/30 rounded-full px-5 py-2 mb-8">
+          <span className="text-base">🎟️</span>
+          <span className="text-brand-300 text-sm font-semibold tracking-wide">
+            Regístrate y entra sin cover
+          </span>
         </div>
 
         {/* CTA */}
@@ -53,7 +61,7 @@ export default function Hero({ onCTAClick }: HeroProps) {
           onClick={onCTAClick}
           className="btn-primary px-12 py-4 rounded-full text-white font-bold text-lg tracking-wide"
         >
-          Quiero participar ↓
+          Regístrate gratis →
         </button>
 
         {/* Scroll hint */}

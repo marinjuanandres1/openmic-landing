@@ -1,44 +1,42 @@
 import { useRef, useState } from 'react'
 import Hero from './components/Hero'
-import PreguardaStep from './components/PreguardaStep'
 import RegistrationForm from './components/RegistrationForm'
+import PreguardaStep from './components/PreguardaStep'
 
-type Step = 'hero' | 'preguarda' | 'form'
+type Step = 'hero' | 'form' | 'presave'
 
 export default function App() {
   const [step, setStep] = useState<Step>('hero')
-  const preguardaRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLDivElement>(null)
+  const presaveRef = useRef<HTMLDivElement>(null)
 
-  const scrollToPreguarda = () => {
-    setStep('preguarda')
-    setTimeout(() => {
-      preguardaRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 50)
-  }
-
-  const onPreguardaConfirmed = () => {
+  const scrollToForm = () => {
     setStep('form')
     setTimeout(() => {
       formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, 50)
   }
 
+  const onFormSubmitted = () => {
+    setStep('presave')
+    setTimeout(() => {
+      presaveRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 50)
+  }
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">
       {/* ── Hero ── */}
-      <Hero onCTAClick={scrollToPreguarda} />
+      <Hero onCTAClick={scrollToForm} />
 
-      {/* ── Preguarda step ── */}
-      <div ref={preguardaRef}>
-        <PreguardaStep onConfirmed={onPreguardaConfirmed} />
+      {/* ── Registration form (always below hero) ── */}
+      <div ref={formRef}>
+        <RegistrationForm onSuccess={onFormSubmitted} />
       </div>
 
-      {/* ── Registration form (revealed after preguarda) ── */}
-      <div ref={formRef}>
-        {step === 'form' && (
-          <RegistrationForm onSuccess={() => {}} />
-        )}
+      {/* ── Presave step (revealed after form submission) ── */}
+      <div ref={presaveRef}>
+        {step === 'presave' && <PreguardaStep />}
       </div>
 
       {/* ── Footer ── */}
@@ -48,7 +46,6 @@ export default function App() {
           alt="SIENTE"
           className="w-28 h-28 object-contain"
           onError={(e) => {
-            // fallback if logo not yet placed in /public
             ;(e.target as HTMLImageElement).style.display = 'none'
           }}
         />
