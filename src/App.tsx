@@ -1,59 +1,63 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Hero from './components/Hero'
-import RegistrationForm from './components/RegistrationForm'
-import PreguardaStep from './components/PreguardaStep'
+import HowItWorks from './components/HowItWorks'
+import RegistrationForm, { type Intent } from './components/RegistrationForm'
+import Logos from './components/Logos'
+import { BACKOFFICE_URL, EVENT } from './event'
 
-type Step = 'hero' | 'form' | 'presave'
+type Status = { closed: boolean; price: number; maxTickets: number }
 
 export default function App() {
-  const [step, setStep] = useState<Step>('hero')
+  const [status, setStatus] = useState<Status>({
+    closed: false,
+    price: EVENT.fallbackPrice,
+    maxTickets: EVENT.fallbackMaxTickets,
+  })
+  const [intent, setIntent] = useState<Intent>(null)
   const formRef = useRef<HTMLDivElement>(null)
-  const presaveRef = useRef<HTMLDivElement>(null)
 
-  const scrollToForm = () => {
-    setStep('form')
-    setTimeout(() => {
-      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 50)
-  }
+  // Live price, cap and sold-out state from the back office (keeps the defaults if it can't be reached)
+  useEffect(() => {
+    fetch(`${BACKOFFICE_URL}/api/public/status`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((s) => {
+        if (!s) return
+        setStatus((prev) => ({
+          closed: Boolean(s.closed),
+          price: Number(s.price) > 0 ? Number(s.price) : prev.price,
+          maxTickets: Number(s.maxTickets) > 0 ? Number(s.maxTickets) : prev.maxTickets,
+        }))
+      })
+      .catch(() => {})
+  }, [])
 
-  const onFormSubmitted = () => {
-    setStep('presave')
-    setTimeout(() => {
-      presaveRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 50)
+  const goToForm = (next: Intent) => {
+    setIntent(next)
+    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">
-      {/* ── Hero ── */}
-      <Hero onCTAClick={scrollToForm} />
+    <div className="min-h-screen bg-tinta font-sans text-hueso">
+      <Hero
+        price={status.price}
+        closed={status.closed}
+        onBuy={() => goToForm('watch')}
+        onSing={() => goToForm('sing')}
+      />
+      <HowItWorks price={status.price} />
 
-      {/* ── Registration form (always below hero) ── */}
-      <div ref={formRef}>
-        <RegistrationForm onSuccess={onFormSubmitted} />
-      </div>
-
-      {/* ── Presave step (revealed after form submission) ── */}
-      <div ref={presaveRef}>
-        {step === 'presave' && <PreguardaStep />}
-      </div>
-
-      {/* ── Footer ── */}
-      <footer className="py-20 px-6 flex flex-col items-center gap-5 border-t border-brand-900/40">
-        <img
-          src="/siente-logo.png"
-          alt="SIENTE"
-          className="w-28 h-28 object-contain"
-          onError={(e) => {
-            ;(e.target as HTMLImageElement).style.display = 'none'
-          }}
+      <div ref={formRef} className="scroll-mt-4">
+        <RegistrationForm
+          intent={intent}
+          price={status.price}
+          maxTickets={status.maxTickets}
+          closed={status.closed}
         />
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-px bg-brand-700/40" />
-          <p className="text-brand-500/60 text-xs tracking-[0.4em] uppercase">Siente Live</p>
-          <div className="w-12 h-px bg-brand-700/40" />
-        </div>
+      </div>
+
+      <footer className="flex flex-col items-center gap-6 border-t border-white/10 px-4 py-16 text-center">
+        <Logos />
+        <p className="eyebrow text-hueso/50">Siente Live · {EVENT.city}</p>
       </footer>
     </div>
   )

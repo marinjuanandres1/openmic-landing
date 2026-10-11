@@ -1,74 +1,105 @@
+import Logos from './Logos'
+import { EVENT, formatCOP } from '../event'
+
 interface HeroProps {
-  onCTAClick: () => void
+  price: number
+  closed: boolean
+  onBuy: () => void
+  onSing: () => void
 }
 
-export default function Hero({ onCTAClick }: HeroProps) {
+const MARQUEE = ['Open Mic', 'Tres60Lab × Siente', EVENT.date, EVENT.time, EVENT.address]
+
+export default function Hero({ price, closed, onBuy, onSing }: HeroProps) {
   return (
-    <section className="topo-bg relative min-h-screen flex flex-col items-center justify-center px-6 py-24 overflow-hidden">
-      {/* Radial purple glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(124,58,237,0.18) 0%, transparent 70%)',
-        }}
-      />
-
-      {/* Top decorative line */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-brand-600 to-transparent opacity-60" />
-
-      <div className="relative z-10 max-w-2xl mx-auto text-center flex flex-col items-center gap-0">
-        {/* Eyebrow */}
-        <p className="text-brand-400 text-xs tracking-[0.35em] uppercase mb-8 font-medium">
-          Siente Live presenta
-        </p>
-
-        {/* Main title */}
-        <h1 className="text-4xl md:text-6xl font-black text-white tracking-[0.2em] uppercase mb-8">
-          Open Mic
-        </h1>
-
-        {/* Divider */}
-        <div className="flex items-center gap-4 mb-8 w-full max-w-xs">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent to-brand-600 opacity-50" />
-          <div className="w-1.5 h-1.5 rounded-full bg-brand-400" />
-          <div className="flex-1 h-px bg-gradient-to-l from-transparent to-brand-600 opacity-50" />
-        </div>
-
-        {/* Hosts */}
-        <p className="text-gray-400 text-base mb-10 tracking-wide">
-          Invitan:{' '}
-          <span className="text-white font-semibold">Sotomonte y Andrea Prieto</span>
-        </p>
-
-        {/* Description card */}
-        <div className="glass rounded-2xl px-8 py-6 mb-8 max-w-lg text-left">
-          <p className="text-gray-300 text-base md:text-lg leading-relaxed">
-            Vamos a celebrar el lanzamiento de "Mi obra de arte", la nueva canción de Andrea Prieto con Sotomonte, con un Open Mic en La Quinta Copa, apoyado por Siente Live.
-          </p>
-        </div>
-
-        {/* Free entry badge */}
-        <div className="flex items-center gap-2 bg-brand-600/20 border border-brand-500/30 rounded-full px-5 py-2 mb-8">
-          <span className="text-base">🎟️</span>
-          <span className="text-brand-300 text-sm font-semibold tracking-wide">
-            Regístrate y entra sin cover
-          </span>
-        </div>
-
-        {/* CTA */}
-        <button
-          onClick={onCTAClick}
-          className="btn-primary px-12 py-4 rounded-full text-white font-bold text-lg tracking-wide"
-        >
-          Regístrate gratis →
-        </button>
-
-        {/* Scroll hint */}
-        <div className="mt-12 flex flex-col items-center gap-2 animate-float opacity-40">
-          <div className="w-px h-8 bg-brand-500" />
+    <header className="relative overflow-hidden">
+      {/* Top bar, like the flyer */}
+      <div className="bg-lila text-negro overflow-hidden whitespace-nowrap py-2" aria-hidden>
+        <div className="flex w-max animate-marquee">
+          {[0, 1].map((k) => (
+            <div key={k} className="flex shrink-0">
+              {[...MARQUEE, ...MARQUEE].map((t, i) => (
+                <span key={i} className="font-wide px-5 text-sm uppercase sm:text-base">
+                  {t} <span className="pl-5 text-morado">✦</span>
+                </span>
+              ))}
+            </div>
+          ))}
         </div>
       </div>
-    </section>
+
+      {/* Brand shapes */}
+      <img
+        src="/ea/ea5-morado.png"
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute -right-32 top-24 w-[520px] opacity-40 md:-right-20 md:w-[640px]"
+      />
+      <img
+        src="/ea/ea4-naranja.png"
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute -left-24 bottom-10 w-72 opacity-80 md:w-96"
+      />
+
+      <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-10 sm:px-6 md:grid-cols-[1.15fr_1fr] md:pb-28 md:pt-16">
+        <div className="animate-fadeInUp">
+          <Logos className="mb-10" />
+
+          <p className="eyebrow mb-4 text-lila">Tres60Lab × Siente presentan</p>
+          <h1 className="font-wide text-[clamp(3.5rem,12vw,7.5rem)] uppercase leading-[0.9] text-hueso">
+            Open
+            <br />
+            Mic
+          </h1>
+
+          <div className="mt-8 flex flex-col items-start gap-2 text-lg sm:text-xl">
+            <span className="tag uppercase">
+              {EVENT.date} · {EVENT.time}
+            </span>
+            <a href={EVENT.mapsUrl} target="_blank" rel="noopener noreferrer" className="tag hover:bg-hueso">
+              {EVENT.address}, {EVENT.city} ↗
+            </a>
+            <span className="tag uppercase">Cover {formatCOP(price)}</span>
+          </div>
+
+          <p className="mt-8 max-w-md text-base leading-relaxed text-hueso/75 sm:text-lg">
+            Micrófono abierto entre vinilos, synths y amplificadores. Ven a cantar o ven a escuchar: todos
+            compran su boleta de {formatCOP(price)} y quedan en la lista.
+          </p>
+
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            {closed ? (
+              <span className="btn btn-ghost px-8 py-4 text-lg">Aforo completo</span>
+            ) : (
+              <>
+                <button onClick={onBuy} className="btn btn-lila px-8 py-4 text-lg">
+                  Comprar boleta →
+                </button>
+                <button onClick={onSing} className="btn btn-ghost px-8 py-4 text-lg">
+                  Quiero cantar
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="relative mx-auto w-full max-w-sm md:max-w-md">
+          <img
+            src="/ea/ea1-lila.png"
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute -left-10 -top-8 w-56 -rotate-6"
+          />
+          <img
+            src="/flyer.jpg"
+            alt={`Flyer Open Mic Tres60Lab × Siente, ${EVENT.date}, ${EVENT.address}, 7pm, cover ${formatCOP(price)}`}
+            width={1080}
+            height={1350}
+            className="relative w-full rotate-2 rounded-sm shadow-[0_30px_80px_rgba(0,0,0,0.6)] ring-1 ring-white/10"
+          />
+        </div>
+      </div>
+    </header>
   )
 }

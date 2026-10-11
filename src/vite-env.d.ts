@@ -1,7 +1,8 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_APPS_SCRIPT_URL: string
+  /** Siente Ticket back office, without trailing slash (e.g. https://backoffice.siente.live) */
+  readonly VITE_BACKOFFICE_URL?: string
 }
 
 interface ImportMeta {

@@ -1,143 +1,41 @@
-# SIENTE OPEN MIC — Landing Page
+# Open Mic · Tres60Lab × Siente
 
-Landing page for the SIENTE OPEN MIC event. Built with React + Vite + Tailwind CSS.
+Landing page for **openmic.siente.live**. Built with React, Vite and Tailwind. Every `git push` to `main` deploys to Vercel.
 
----
+Everyone pays the cover, whether they sing or just come to listen. The form sends each sign-up to **Siente Ticket** (backoffice.siente.live), which saves it and returns the Mercado Pago link.
+
+## Flow
+
+1. The page loads `GET {VITE_BACKOFFICE_URL}/api/public/status`. That returns `{ closed, price, maxTickets }`. If the list is closed, the form becomes «Aforo completo».
+2. The form posts to `POST {VITE_BACKOFFICE_URL}/api/public/checkout` with name, WhatsApp, email, number of tickets, companions, and whether the person sings. Singers also send songs and format.
+3. The back office creates the contact (source "Web", event "Open Mic", with the open mic answers) and returns the Mercado Pago `url`. The page redirects there.
+4. Once the payment is approved, the person appears in **Invitados** with the **Canta** badge if they sing. Mercado Pago sends them back to `backoffice.siente.live/gracias`.
+
+Price, ticket cap and closing the list are all handled in the back office (**Ajustes**). The page only has fallbacks for when it can't reach the back office: $20.000 and 10 tickets.
 
 ## Setup
 
 ```bash
 npm install
-npm run dev
+npm run dev -- --port 5174
 ```
 
----
-
-## Google Sheets Integration — Step by Step
-
-Form submissions are sent to a Google Apps Script Web App, which writes rows into a Google Sheet.
-
-### 1. Create the Google Sheet
-
-1. Go to [sheets.google.com](https://sheets.google.com) and create a new spreadsheet.
-2. Name the sheet (e.g. **SIENTE OPEN MIC — Inscripciones**).
-3. In Row 1, add these headers in columns A–E:
-
-   | A | B | C | D | E |
-   |---|---|---|---|---|
-   | Timestamp | Nombre | WhatsApp | Canciones | Formato |
-
-### 2. Create the Apps Script
-
-1. In your Google Sheet, click **Extensions → Apps Script**.
-2. Delete all existing code and paste the following:
-
-```js
-function doPost(e) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  const params = e.parameter;
-
-  sheet.appendRow([
-    new Date(),
-    params.nombre    || '',
-    params.whatsapp  || '',
-    params.canciones || '',
-    params.formato   || '',
-  ]);
-
-  return ContentService
-    .createTextOutput(JSON.stringify({ result: 'success' }))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-// Handles preflight/GET requests (keeps deployment alive)
-function doGet() {
-  return ContentService
-    .createTextOutput(JSON.stringify({ status: 'ok' }))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-```
-
-3. Click **Save** (give the project any name, e.g. *OpenMic Form Handler*).
-
-### 3. Deploy as Web App
-
-1. Click **Deploy → New deployment**.
-2. Click the gear icon ⚙️ next to "Select type" and choose **Web app**.
-3. Set the fields:
-   - **Description**: OpenMic Form Handler
-   - **Execute as**: Me
-   - **Who has access**: **Anyone**
-4. Click **Deploy**.
-5. Authorize the script when prompted (click **Allow**).
-6. Copy the **Web app URL** — it looks like:
-   ```
-   https://script.google.com/macros/s/AKfyc.../exec
-   ```
-
-### 4. Add the URL to your environment
-
-**For local development**, create a `.env` file in the project root:
+Environment variable (`.env.local` for dev, Vercel for production):
 
 ```
-VITE_APPS_SCRIPT_URL=xxx
+VITE_BACKOFFICE_URL=https://backoffice.siente.live
 ```
 
-**For Vercel (production)**, add it in the Vercel dashboard:
-- Project Settings → Environment Variables
-- Name: `VITE_APPS_SCRIPT_URL`
-- Value: your Apps Script URL
-- Environments: Production, Preview
+For local development, point it at `http://localhost:3000` and add `http://localhost:5174` to `PUBLIC_CHECKOUT_ORIGINS` in the back office.
 
----
+## Changing the event
 
-## Add the Siente Logo
+Event text (date, time, address) lives in `src/event.ts`. The flyer is `public/flyer.jpg`, and `public/og.jpg` is the link preview (1200×630).
 
-Place `siente-logo.png` in the `/public` folder. It will appear in the footer and as the favicon.
+## Brand
 
----
-
-## Deploy to Vercel via GitHub
-
-1. **Push this project to a new GitHub repo:**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git remote add origin https://github.com/YOUR_USER/openmic-landing.git
-   git push -u origin main
-   ```
-
-2. **Connect to Vercel:**
-   - Go to [vercel.com](https://vercel.com) → **Add New Project**
-   - Import your GitHub repo
-   - Vercel auto-detects Vite — no config needed
-   - Add the env variable `VITE_APPS_SCRIPT_URL` before deploying
-
-3. **Deploy** — your site will be live at `your-project.vercel.app`
-
-> **Tip:** Every `git push` to `main` will auto-deploy to Vercel.
-
----
-
-## Project Structure
-
-```
-OpenMic_Landing/
-├── public/
-│   └── siente-logo.png       ← Add your logo here
-├── src/
-│   ├── App.tsx               ← Step state + layout
-│   ├── main.tsx
-│   ├── index.css             ← Global styles + Tailwind
-│   ├── vite-env.d.ts         ← Env variable types
-│   └── components/
-│       ├── Hero.tsx          ← Event hero section
-│       ├── PreguardaStep.tsx ← Preguarda flow
-│       └── RegistrationForm.tsx ← Form + submission
-├── .env.example
-├── index.html
-├── package.json
-├── tailwind.config.js
-└── vite.config.ts
-```
+- Siente palette (Brand Book 2026): morado `#6A0F84`, lila `#CEA7DC`, naranja `#F25021`, negro `#1D1D1F`, hueso `#F4EFEB`. Type is Archivo at its widest for headlines.
+- Logos in `public/`:
+  - `tres60lab.svg`, made from `LOGO_360.ai` and colored hueso through `style="color:…"`.
+  - `siente-crema.png` and `siente-simbolo.png` (favicon).
+- Auxiliary brand shapes in `public/ea/`.

@@ -1,45 +1,36 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  // relative: paths resolve from this file, not the working directory
+  content: { relative: true, files: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'] },
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Archivo', 'system-ui', 'sans-serif'],
       },
+      // Siente palette (Brand Book 2026), same tokens as backoffice.siente.live
       colors: {
-        brand: {
-          50:  '#f3e8ff',
-          100: '#e9d5ff',
-          300: '#c084fc',
-          400: '#a855f7',
-          500: '#9333ea',
-          600: '#7c3aed',
-          700: '#6d28d9',
-          800: '#4c1d95',
-          900: '#2e1065',
-        },
+        morado: { DEFAULT: '#6A0F84', dark: '#520A66' },
+        naranja: '#F25021',
+        lila: '#CEA7DC',
+        negro: '#1D1D1F',
+        tinta: '#121213',
+        hueso: '#F4EFEB',
+        gris: '#5E5A60',
+        linea: '#E7E0DA',
       },
       keyframes: {
-        glowPulse: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(124,58,237,0.25), 0 0 40px rgba(124,58,237,0.1)' },
-          '50%':       { boxShadow: '0 0 40px rgba(124,58,237,0.55), 0 0 80px rgba(124,58,237,0.25)' },
+        marquee: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-50%)' },
         },
         fadeInUp: {
           from: { opacity: '0', transform: 'translateY(16px)' },
-          to:   { opacity: '1', transform: 'translateY(0)' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%':      { transform: 'translateY(-8px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
         },
       },
       animation: {
-        glowPulse:  'glowPulse 3s ease-in-out infinite',
-        fadeInUp:   'fadeInUp 0.5s ease-out both',
-        float:      'float 4s ease-in-out infinite',
+        marquee: 'marquee 28s linear infinite',
+        fadeInUp: 'fadeInUp 0.5s ease-out both',
       },
     },
   },
