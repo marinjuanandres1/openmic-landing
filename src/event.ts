@@ -1,5 +1,7 @@
 /** Event info shown on the page. Price and per-person cap come live from the back office. */
 export const EVENT = {
+  /** Event slug in Siente Ticket (sign-ups and payments go to this event). */
+  slug: 'openmic-tres60lab-2026-10-15',
   date: 'Jueves 15 de octubre',
   time: '7:00 pm',
   address: 'Carrera 12a #78-40',

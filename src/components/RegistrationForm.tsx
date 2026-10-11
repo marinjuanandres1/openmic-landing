@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BACKOFFICE_URL, formatCOP } from '../event'
+import { BACKOFFICE_URL, EVENT, formatCOP } from '../event'
 
 /** Which hero button brought the person here (preselects the sing/watch toggle). */
 export type Intent = 'sing' | 'watch' | null
@@ -51,6 +51,7 @@ export default function RegistrationForm({ intent, price, maxTickets, closed }: 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          event: EVENT.slug,
           nombre,
           email,
           whatsapp,

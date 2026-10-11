@@ -18,7 +18,7 @@ export default function App() {
 
   // Live price, cap and sold-out state from the back office (keeps the defaults if it can't be reached)
   useEffect(() => {
-    fetch(`${BACKOFFICE_URL}/api/public/status`)
+    fetch(`${BACKOFFICE_URL}/api/public/status?event=${EVENT.slug}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((s) => {
         if (!s) return
