@@ -4,6 +4,8 @@ import { BACKOFFICE_URL, formatCOP } from '../event'
 /** Which hero button brought the person here (preselects the sing/watch toggle). */
 export type Intent = 'sing' | 'watch' | null
 
+const FORMATS = ['Guitarra y voz', 'Pista y voz'] as const
+
 interface Props {
   intent: Intent
   price: number
@@ -41,7 +43,7 @@ export default function RegistrationForm({ intent, price, maxTickets, closed }: 
     setError('')
     if (canta === null) return setError('Cuéntanos si vienes a cantar o solo a escuchar.')
     if (canta && !canciones.trim()) return setError('Cuéntanos qué canciones quieres cantar.')
-    if (canta && !formato.trim()) return setError('Cuéntanos el formato (ej: guitarra y voz).')
+    if (canta && !formato.trim()) return setError('Elige el formato: guitarra y voz o pista y voz.')
 
     setLoading(true)
     try {
@@ -90,9 +92,7 @@ export default function RegistrationForm({ intent, price, maxTickets, closed }: 
         <div className="mb-8 text-center">
           <p className="eyebrow text-morado">Inscripciones</p>
           <h2 className="font-wide mt-3 text-3xl uppercase sm:text-4xl">Asegura tu boleta</h2>
-          <p className="mt-3 text-gris">
-            {formatCOP(price)} por persona. Cantes o vengas a escuchar, todos pagan cover.
-          </p>
+          <p className="mt-3 text-gris">{formatCOP(price)} por persona.</p>
         </div>
 
         <form
@@ -154,7 +154,7 @@ export default function RegistrationForm({ intent, price, maxTickets, closed }: 
                 Sí, quiero cantar
               </Toggle>
               <Toggle selected={canta === false} onClick={() => setCanta(false)}>
-                Solo vengo a ver
+                Solo voy a ver
               </Toggle>
             </div>
           </div>
@@ -174,15 +174,17 @@ export default function RegistrationForm({ intent, price, maxTickets, closed }: 
                   placeholder={'1. Canción — Artista\n2. Canción — Artista'}
                 />
               </Field>
-              <Field label="Formato">
-                <input
-                  className="input"
-                  value={formato}
-                  onChange={(e) => setFormato(e.target.value)}
-                  maxLength={120}
-                  placeholder="Ej: guitarra y voz, pista y voz, teclado…"
-                />
-              </Field>
+              <div>
+                <p className="mb-1.5 text-sm font-semibold">Formato</p>
+                <p className="mb-3 text-xs leading-relaxed text-gris">Vamos a tener 2 micrófonos y sonido.</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {FORMATS.map((f) => (
+                    <Toggle key={f} selected={formato === f} onClick={() => setFormato(f)}>
+                      {f}
+                    </Toggle>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
 

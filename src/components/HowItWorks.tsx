@@ -3,7 +3,7 @@ import { formatCOP } from '../event'
 export default function HowItWorks({ price }: { price: number }) {
   const steps = [
     { n: '01', title: 'Inscríbete', text: 'Dinos si vienes a cantar o solo a escuchar. Si cantas, cuéntanos tus canciones y el formato.' },
-    { n: '02', title: 'Paga tu boleta', text: `${formatCOP(price)} por persona, en Mercado Pago. Cantes o no, todos pagan cover.` },
+    { n: '02', title: 'Paga tu boleta', text: `${formatCOP(price)} por persona, en Mercado Pago.` },
     { n: '03', title: 'Quedas en la lista', text: 'Apenas se confirma el pago entras a la lista. En la puerta solo das tu nombre.' },
   ]
   return (

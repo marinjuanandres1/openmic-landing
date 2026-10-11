@@ -63,11 +63,6 @@ export default function Hero({ price, closed, onBuy, onSing }: HeroProps) {
             <span className="tag uppercase">Cover {formatCOP(price)}</span>
           </div>
 
-          <p className="mt-8 max-w-md text-base leading-relaxed text-hueso/75 sm:text-lg">
-            Micrófono abierto entre vinilos, synths y amplificadores. Ven a cantar o ven a escuchar: todos
-            compran su boleta de {formatCOP(price)} y quedan en la lista.
-          </p>
-
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             {closed ? (
               <span className="btn btn-ghost px-8 py-4 text-lg">Aforo completo</span>
