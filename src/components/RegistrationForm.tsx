@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { BACKOFFICE_URL, EVENT, formatCOP } from '../event'
+import ConsentChecks, { type Consents } from './ConsentCheckbox'
+import PhoneInput from './PhoneInput'
 
 /** Which hero button brought the person here (preselects the sing/watch toggle). */
 export type Intent = 'sing' | 'watch' | null
@@ -11,9 +13,11 @@ interface Props {
   price: number
   maxTickets: number
   closed: boolean
+  /** Privacy policy linked from the consent checkbox ("" = no link yet) */
+  privacyUrl: string
 }
 
-export default function RegistrationForm({ intent, price, maxTickets, closed }: Props) {
+export default function RegistrationForm({ intent, price, maxTickets, closed, privacyUrl }: Props) {
   const [nombre, setNombre] = useState('')
   const [email, setEmail] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
@@ -22,6 +26,7 @@ export default function RegistrationForm({ intent, price, maxTickets, closed }: 
   const [formato, setFormato] = useState('')
   const [cantidad, setCantidad] = useState(1)
   const [acompanantes, setAcompanantes] = useState<string[]>([])
+  const [consents, setConsents] = useState<Consents>({ marketing: false, share: false })
   const [website, setWebsite] = useState('') // honeypot
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -60,6 +65,8 @@ export default function RegistrationForm({ intent, price, maxTickets, closed }: 
           formato: canta ? formato : '',
           cantidad,
           acompanantes,
+          consentimiento: consents.marketing,
+          compartir: consents.share,
           website,
         }),
       })
@@ -113,15 +120,7 @@ export default function RegistrationForm({ intent, price, maxTickets, closed }: 
             />
           </Field>
           <Field label="WhatsApp">
-            <input
-              className="input"
-              type="tel"
-              value={whatsapp}
-              onChange={(e) => setWhatsapp(e.target.value)}
-              required
-              autoComplete="tel"
-              placeholder="300 000 0000"
-            />
+            <PhoneInput onChange={setWhatsapp} />
           </Field>
           <Field label="Correo">
             <input
@@ -237,6 +236,8 @@ export default function RegistrationForm({ intent, price, maxTickets, closed }: 
               <span className="font-wide text-2xl tabular-nums">{formatCOP(price * cantidad)}</span>
             </div>
           </div>
+
+          <ConsentChecks value={consents} onChange={setConsents} privacyUrl={privacyUrl} />
 
           {error && (
             <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-center text-sm text-red-700">
