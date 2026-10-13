@@ -5,13 +5,14 @@ import RegistrationForm, { type Intent } from './components/RegistrationForm'
 import Logos from './components/Logos'
 import { BACKOFFICE_URL, EVENT } from './event'
 
-type Status = { closed: boolean; price: number; maxTickets: number }
+type Status = { closed: boolean; price: number; maxTickets: number; privacyUrl: string }
 
 export default function App() {
   const [status, setStatus] = useState<Status>({
     closed: false,
     price: EVENT.fallbackPrice,
     maxTickets: EVENT.fallbackMaxTickets,
+    privacyUrl: '',
   })
   const [intent, setIntent] = useState<Intent>(null)
   const formRef = useRef<HTMLDivElement>(null)
@@ -26,6 +27,7 @@ export default function App() {
           closed: Boolean(s.closed),
           price: Number(s.price) > 0 ? Number(s.price) : prev.price,
           maxTickets: Number(s.maxTickets) > 0 ? Number(s.maxTickets) : prev.maxTickets,
+          privacyUrl: typeof s.privacyUrl === 'string' && s.privacyUrl.startsWith('https://') ? s.privacyUrl : '',
         }))
       })
       .catch(() => {})
@@ -51,6 +53,7 @@ export default function App() {
           intent={intent}
           price={status.price}
           maxTickets={status.maxTickets}
+          privacyUrl={status.privacyUrl}
           closed={status.closed}
         />
       </div>
