@@ -24,6 +24,8 @@ export default function RegistrationForm({ intent, price, maxTickets, closed, pr
   const [canta, setCanta] = useState<boolean | null>(null)
   const [canciones, setCanciones] = useState('')
   const [formato, setFormato] = useState('')
+  /** Singers acknowledge that the lineup is almost full and singing isn't guaranteed (never pre-checked). */
+  const [aceptaCupo, setAceptaCupo] = useState(false)
   const [cantidad, setCantidad] = useState(1)
   const [acompanantes, setAcompanantes] = useState<string[]>([])
   const [consents, setConsents] = useState<Consents>({ marketing: false, share: false })
@@ -47,8 +49,10 @@ export default function RegistrationForm({ intent, price, maxTickets, closed, pr
     e.preventDefault()
     setError('')
     if (canta === null) return setError('Cuéntanos si vienes a cantar o solo a escuchar.')
-    if (canta && !canciones.trim()) return setError('Cuéntanos qué canciones quieres cantar.')
+    if (canta && !canciones.trim()) return setError('Cuéntanos qué canción quieres cantar.')
     if (canta && !formato.trim()) return setError('Elige el formato: guitarra y voz o pista y voz.')
+    if (canta && !aceptaCupo)
+      return setError('Para inscribirte como cantante, confirma que entiendes que no está garantizado que cantes.')
 
     setLoading(true)
     try {
@@ -161,17 +165,25 @@ export default function RegistrationForm({ intent, price, maxTickets, closed, pr
 
           {canta && (
             <div className="animate-fadeInUp space-y-5 rounded-2xl bg-lila/25 p-5">
-              <Field
-                label="¿Qué canciones quieres cantar? (máximo 3)"
-                hint="Al inscribirte quedas como candidato. Ven preparado: haremos lo posible para que todos participen, pero no garantizamos que puedas cantar todas tus canciones."
-              >
-                <textarea
-                  className="input resize-none"
-                  rows={3}
+              <div className="rounded-2xl bg-white p-4 ring-1 ring-linea">
+                <p className="eyebrow text-morado">Cupos para cantar casi llenos</p>
+                <p className="mt-2 text-sm leading-relaxed text-negro">
+                  ¡Qué emoción que quieras cantar! 🎤 Ya casi llenamos los cupos de cantantes, pero igual puedes venir y
+                  vivir la noche con nosotros.
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-gris">
+                  Cada cantante tiene <strong className="text-negro">una canción</strong> y vamos a hacer todo lo posible
+                  para que todos los que quieran cantar, canten. Eso sí, no podemos garantizarlo. Te esperamos: va a ser
+                  una noche increíble.
+                </p>
+              </div>
+              <Field label="¿Qué canción quieres cantar?">
+                <input
+                  className="input"
                   value={canciones}
                   onChange={(e) => setCanciones(e.target.value)}
-                  maxLength={500}
-                  placeholder={'1. Canción — Artista\n2. Canción — Artista'}
+                  maxLength={120}
+                  placeholder="Canción — Artista"
                 />
               </Field>
               <div>
@@ -185,6 +197,18 @@ export default function RegistrationForm({ intent, price, maxTickets, closed, pr
                   ))}
                 </div>
               </div>
+              <label className="flex items-start gap-3 text-left text-sm text-negro">
+                <input
+                  type="checkbox"
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-morado"
+                  checked={aceptaCupo}
+                  onChange={(e) => setAceptaCupo(e.target.checked)}
+                />
+                <span>
+                  Entiendo que los cupos para cantar están casi llenos y que no está garantizado que pueda cantar. Igual
+                  quiero venir.
+                </span>
+              </label>
             </div>
           )}
 
