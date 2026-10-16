@@ -9,6 +9,8 @@ export const EVENT = {
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Carrera 12a #78-40, Bogotá'),
   fallbackPrice: 20000,
   fallbackMaxTickets: 10,
+  /** true = the web form stays closed (door sales only), whatever the back office says. */
+  formClosed: true,
 }
 
 export const BACKOFFICE_URL = (import.meta.env.VITE_BACKOFFICE_URL ?? 'https://backoffice.siente.live').replace(/\/+$/, '')

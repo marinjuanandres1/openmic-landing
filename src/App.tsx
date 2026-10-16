@@ -42,7 +42,7 @@ export default function App() {
     <div className="min-h-screen bg-tinta font-sans text-hueso">
       <Hero
         price={status.price}
-        closed={status.closed}
+        closed={EVENT.formClosed || status.closed}
         onBuy={() => goToForm('watch')}
         onSing={() => goToForm('sing')}
       />
@@ -54,7 +54,7 @@ export default function App() {
           price={status.price}
           maxTickets={status.maxTickets}
           privacyUrl={status.privacyUrl}
-          closed={status.closed}
+          closed={EVENT.formClosed || status.closed}
         />
       </div>
 

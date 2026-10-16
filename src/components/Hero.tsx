@@ -65,7 +65,12 @@ export default function Hero({ price, closed, onBuy, onSing }: HeroProps) {
 
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             {closed ? (
-              <span className="btn btn-ghost px-8 py-4 text-lg">Aforo completo</span>
+              <>
+                <span className="btn btn-lila px-8 py-4 text-lg">Entradas en taquilla</span>
+                <a href={EVENT.mapsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost px-8 py-4 text-lg">
+                  Cómo llegar →
+                </a>
+              </>
             ) : (
               <>
                 <button onClick={onBuy} className="btn btn-lila px-8 py-4 text-lg">

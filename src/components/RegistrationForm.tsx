@@ -89,10 +89,21 @@ export default function RegistrationForm({ intent, price, maxTickets, closed, pr
       <section className="bg-hueso px-4 py-20 text-negro sm:px-6">
         <div className="mx-auto max-w-xl rounded-3xl bg-white p-8 text-center shadow-sm ring-1 ring-linea md:p-12">
           <p className="eyebrow text-morado">Open Mic · Tres60Lab × Siente</p>
-          <h2 className="font-wide mt-3 text-3xl uppercase">Aforo completo</h2>
-          <p className="mt-3 text-gris">
-            Ya no quedan boletas para esta fecha. Síguenos para enterarte del próximo Open Mic.
+          <h2 className="font-wide mt-3 text-3xl uppercase">¡Nos vemos esta noche!</h2>
+          <p className="mt-4 leading-relaxed text-gris">
+            Mil gracias por la emoción 💜 Ya cerramos las inscripciones por la web, pero{' '}
+            <strong className="text-negro">todavía hay entradas en taquilla</strong>. Llega directo a {EVENT.address},{' '}
+            {EVENT.city} desde las {EVENT.time} y compra tu entrada en la puerta ({formatCOP(price)}).
           </p>
+          <p className="mt-3 leading-relaxed text-gris">Te estamos esperando: va a ser una noche increíble. 🎤</p>
+          <a
+            href={EVENT.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary mt-6 px-8 py-3"
+          >
+            Cómo llegar →
+          </a>
         </div>
       </section>
     )
